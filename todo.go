@@ -81,10 +81,64 @@ func ListTasks() {
 	}
 }
 
+
+// 初見 とりあえず書いてみた
+/*
 func CompleteTask(id int) {
-	panic("unimplemented")
+	task, err := loadTasks()
+	if err != nil{
+		panic(err)
+	}
+	task{
+		ID: nextID(task),
+		Title: title,
+		Done: true,
+	}
+	
+	if err := saveTasks(task); err != nil{
+		panic(err)
+	}
+}
+*/
+
+func CompleteTask(id int){
+	tasks, err := loadTasks()
+	if err != nil {
+		panic(err)
+	}
+
+	found := false
+	for i := range tasks {
+		if tasks[i].ID == id{
+			tasks[i].Done = true
+			found = true
+			break
+		}
+	}
+
+	if !found{
+		println("指定されたIDのタスクが見つかりませんでした｡")
+		return
+	}
+
+	if err := saveTasks(tasks); err != nil {
+		panic(err)
+	}
 }
 
 func DeleteTask(id int) {
-	panic("unimplemented")
+	tasks, err := loadTasks()
+	if err != nil {
+		panic(err)
+	}
+
+	for i, task := range tasks{
+		if task.ID == id{
+			if err := saveTasks(append(tasks[:i], tasks[i+1:]...)); err != nil {
+				panic(err)
+			}
+			return
+		}
+	} 
 }
+
