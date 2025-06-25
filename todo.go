@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -50,11 +51,31 @@ func nextID(tasks []Task) int {
 }
 
 func AddTask(title string) {
-	panic("unimplemented")
+	tasks, err := loadTasks()
+	if err != nil {
+		panic(err)
+	}
+	task := Task{
+		ID:    nextID(tasks),
+		Title: title,
+		Done:  false,
+	}
+	tasks = append(tasks, task)
+	saveTasks(tasks)
 }
 
 func ListTasks() {
-	panic("unimplemented")
+	tasks, err := loadTasks()
+	if err != nil {
+		panic(err)
+	}
+	for _, t := range tasks {
+		status := " "
+		if t.Done {
+			status = "x"
+		}
+		println(fmt.Sprintf("[%s] %d: %s", status, t.ID, t.Title))
+	}
 }
 
 func CompleteTask(id int) {
