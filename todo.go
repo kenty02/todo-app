@@ -61,7 +61,10 @@ func AddTask(title string) {
 		Done:  false,
 	}
 	tasks = append(tasks, task)
-	saveTasks(tasks)
+	err = saveTasks(tasks)
+	 if err != nil {
+		panic(err)
+	}
 }
 
 func ListTasks() {
@@ -74,7 +77,7 @@ func ListTasks() {
 		if t.Done {
 			status = "x"
 		}
-		println(fmt.Sprintf("[%s] %d: %s", status, t.ID, t.Title))
+		fmt.Printf("[%s] %d: %s\n", status, t.ID, t.Title)
 	}
 }
 
